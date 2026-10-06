@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera Monitor</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 20px 0;
+    }
+
+    video {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: auto;
+      background: black;
+    }
+
+    button {
+      margin: 20px 5px;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    #status {
+      margin: 15px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Camera Monitor</h1>
+
+  <video id="camera" autoplay playsinline></video>
+
+  <div>
+    <button id="startButton">カメラ開始</button>
+  </div>
+
+  <div id="status">待機中</div>
+
+  <script>
+    const video = document.getElementById("camera");
+    const startButton = document.getElementById("startButton");
+    const status = document.getElementById("status");
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment"
+          },
+          audio: false
+        });
+
+        video.srcObject = stream;
+        status.textContent = "カメラ起動中";
+      } catch (error) {
+        console.error(error);
+        status.textContent = "カメラを起動できませんでした";
+      }
+    }
+
+    startButton.addEventListener("click", startCamera);
+  </script>
+
+</body>
+</html>
